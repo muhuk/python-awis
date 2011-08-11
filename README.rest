@@ -1,0 +1,8 @@
+Wraps Alexa Web Information Service.
+
+Usage::
+
+    api = AwisApi(ACCESS_ID, SECRET_ACCESS_KEY)
+    tree = api.url_info("www.domain.com", "Rank", "LinksInCount")
+    elem = tree.find("//{%s}StatusCode" % api.NS_PREFIXES["alexa"])
+    assert elem.text == "Success"
