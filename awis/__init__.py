@@ -103,6 +103,7 @@ class AwisApi(object):
         )
 
     def url_info(self, urls, *response_groups, **kwargs):
+        urls = map(urllib.quote, urls)
         params = { "Action": "UrlInfo" }
         if not isinstance(urls, (list, tuple)):
             params.update({
