@@ -6,3 +6,8 @@ Usage::
     tree = api.url_info("www.domain.com", "Rank", "LinksInCount")
     elem = tree.find("//{%s}StatusCode" % api.NS_PREFIXES["alexa"])
     assert elem.text == "Success"
+
+Added possibility to do batch requests::
+
+    tree = api.url_info(("example1.com", "example2.com", "example3.com"), "Rank", "LinksInCount")
+
