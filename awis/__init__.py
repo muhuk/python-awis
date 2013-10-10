@@ -103,22 +103,21 @@ class AwisApi(object):
         )
 
     def url_info(self, urls, *response_groups, **kwargs):
-        urls = map(urllib.quote, urls)
         params = { "Action": "UrlInfo" }
         if not isinstance(urls, (list, tuple)):
             params.update({
-                "Url": urls,
+                "Url": urllib.quote(urls),
                 "ResponseGroup": ",".join(response_groups),
              })
         else:
             if len(urls) > 5:
                 raise RuntimeError, "Maximum number of batch URLs is 5."
 
-            params.update({ "UrlInfo.Shared.ResponseGroup": ",".join(response_groups), })    
-            
+            params.update({ "UrlInfo.Shared.ResponseGroup": ",".join(response_groups), })
+
             for i, url in enumerate(urls):
-                params.update({"UrlInfo.%d.Url" % (i + 1): url})
-        
+                params.update({"UrlInfo.%d.Url" % (i + 1): urllib.quote(url)})
+
         return self.request(params, **kwargs)
 
     @staticmethod
