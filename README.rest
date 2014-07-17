@@ -13,6 +13,7 @@ Batch UrlInfo requests::
 
 Making SitesLinkingIn requests::
 
+    api = AwisApi(ACCESS_ID, SECRET_ACCESS_KEY)
     tree = api.sites_linking_in('metmuseum.org', count=20, start=0)
     for element in tree.findall('//awis:SitesLinkingIn/awis:Site', api.NS_PREFIXES):
         print element.find('awis:Title', api.NS_PREFIXES).text
