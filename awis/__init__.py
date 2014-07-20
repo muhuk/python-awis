@@ -61,6 +61,8 @@ class AwisApi(object):
         "alexa": "http://alexa.amazonaws.com/doc/2005-10-05/",
         "awis": "http://awis.amazonaws.com/doc/2005-07-11",
     }
+    MAX_BATCH_REQUESTS = 5
+    MAX_SITES_LINKING_IN_COUNT = 20
 
     def __init__(self, access_id, secret_access_key):
         self.access_id = access_id
@@ -110,8 +112,8 @@ class AwisApi(object):
                 "ResponseGroup": ",".join(response_groups),
              })
         else:
-            if len(urls) > 5:
-                raise RuntimeError, "Maximum number of batch URLs is 5."
+            if len(urls) > self.MAX_BATCH_REQUESTS:
+                raise RuntimeError, "Maximum number of batch URLs is %s." % self.MAX_BATCH_REQUESTS
 
             params.update({ "UrlInfo.Shared.ResponseGroup": ",".join(response_groups), })
 
@@ -119,6 +121,33 @@ class AwisApi(object):
                 params.update({"UrlInfo.%d.Url" % (i + 1): urllib.quote(url)})
 
         return self.request(params, **kwargs)
+
+    def sites_linking_in(self, urls, count=MAX_SITES_LINKING_IN_COUNT, start=0):
+        if count > self.MAX_SITES_LINKING_IN_COUNT:
+            raise RuntimeError, "Maximum SitesLinkingIn result count is %s." % self.MAX_SITES_LINKING_IN_COUNT
+
+        params = { "Action": "SitesLinkingIn" }
+        if not isinstance(urls, (list, tuple)):
+            params.update({
+                "Url": urllib.quote(urls),
+                "ResponseGroup": "SitesLinkingIn",
+                "Count": count,
+                "Start": start,
+             })
+        else:
+            if len(urls) > self.MAX_BATCH_REQUESTS:
+                raise RuntimeError, "Maximum number of batch URLs is %s." % self.MAX_BATCH_REQUESTS
+
+            params.update({
+                "SitesLinkingIn.Shared.ResponseGroup": "SitesLinkingIn",
+                "SitesLinkingIn.Shared.Count": count,
+                "SitesLinkingIn.Shared.Start": start,
+            })
+
+            for i, url in enumerate(urls):
+                params.update({"SitesLinkingIn.%d.Url" % (i + 1): urllib.quote(url)})
+
+        return self.request(params)
 
     @staticmethod
     def _get_timestamp():
