@@ -10,7 +10,7 @@ for scheme in INSTALL_SCHEMES.values():
 
 
 license_text = open('LICENSE.txt').read()
-long_description = open('README.rest').read()
+long_description = open('README.rst').read()
 
 
 setup(

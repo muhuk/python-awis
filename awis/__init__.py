@@ -34,7 +34,10 @@ except ImportError:
 
 __author__ = u'Atamert \xd6l\xe7gen'
 __copyright__ = u'Copyright 2014, Atamert \xd6l\xe7gen'
-__credits__ = [u'Atamert \xd6l\xe7gen', u'Egor Balyshev', u'Timo Duchrow']
+__credits__ = [u'Atamert \xd6l\xe7gen',
+               u'Egor Balyshev',
+               u'Oscar Ibatullin',
+               u'Timo Duchrow']
 
 
 __license__ = 'GPL'
