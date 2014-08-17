@@ -43,6 +43,10 @@ Changes since version 1.0
 - Added support for batch requests.
 - Added ``SitesLinkingIn`` request support.
 
+Changes since version 1.1
+-------------------------
+
+- ...
 
 
 .. _Alexa Web Information Service: http://aws.amazon.com/awis/
