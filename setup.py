@@ -21,7 +21,7 @@ setup(
     author_email = __email__,
     license = license_text,
     packages = ['awis'],
-    data_files=[('awis', ['LICENSE.txt', 'README.rest'])],
+    data_files=[('awis', ['LICENSE.txt', 'README.rst'])],
     description = 'Python bindings for Alexa Web ' \
                   'Information Service (AWIS) API',
     long_description=long_description,
