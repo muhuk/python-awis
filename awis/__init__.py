@@ -66,6 +66,7 @@ class AwisApi(object):
     }
     MAX_BATCH_REQUESTS = 5
     MAX_SITES_LINKING_IN_COUNT = 20
+    MAX_CATEGORY_LISTINGS_COUNT = 20
 
     def __init__(self, access_id, secret_access_key):
         self.access_id = access_id
@@ -107,6 +108,24 @@ class AwisApi(object):
            ),
         )
 
+    def category_listings(self, path, SortBy="Popularity", Recursive=False, Start=1, Count=MAX_CATEGORY_LISTINGS_COUNT, Descriptions=False):
+        params = { "Action": "CategoryListings", "ResponseGroup": "Listings" }
+        params.update({ "Path": urllib.quote(path) })
+        params.update({"SortBy": SortBy})
+        if not Recursive:
+            params.update({"Recursive": "False"})
+        else:
+            params.update({"Recursive": "True"})
+        params.update({"Start":str(Start)})
+        if Count > self.MAX_CATEGORY_LISTINGS_COUNT:
+            raise RuntimeError, "Max number of returned listings is %s." % self.MAX_CATEGORY_LISTINGS_COUNT
+        if not Descriptions:
+            params.update({"Descriptions": "False"})
+        else:
+            params.update({"Descriptions": "True"})
+
+        return self.request(params)
+        
     def url_info(self, urls, *response_groups, **kwargs):
         params = { "Action": "UrlInfo" }
         if not isinstance(urls, (list, tuple)):
