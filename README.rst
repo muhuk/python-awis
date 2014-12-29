@@ -37,7 +37,8 @@ Making ``CategoryListings`` requests::
 
     api = AwisApi(ACCESS_ID, SECRET_ACCESS_KEY)
     tree = api.category_listings("Top/Business/Financial_Services")
-    for item in tree.findall("//{%s}DataUrl" % api.NS_PREFIXES["awis"]): print(item.text)
+    for item in tree.findall("//{%s}DataUrl" % api.NS_PREFIXES["awis"]):
+        print(item.text)
 
 
 Changelog
