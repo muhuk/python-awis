@@ -109,8 +109,8 @@ class AwisApi(object):
         )
 
     def category_listings(self, path, SortBy="Popularity", Recursive=False, Start=1, Count=MAX_CATEGORY_LISTINGS_COUNT, Descriptions=False):
-        params = { "Action": "CategoryListings", "ResponseGroup": "Listings" }
-        params.update({ "Path": urllib.quote(path) })
+        params = {"Action": "CategoryListings", "ResponseGroup": "Listings"}
+        params.update({"Path": urllib.quote(path)})
         params.update({"SortBy": SortBy})
         if not Recursive:
             params.update({"Recursive": "False"})
@@ -118,7 +118,7 @@ class AwisApi(object):
             params.update({"Recursive": "True"})
         params.update({"Start":str(Start)})
         if Count > self.MAX_CATEGORY_LISTINGS_COUNT:
-            raise RuntimeError, "Max number of returned listings is %s." % self.MAX_CATEGORY_LISTINGS_COUNT
+            raise RuntimeError("Max number of returned listings is %s." % self.MAX_CATEGORY_LISTINGS_COUNT)
         if not Descriptions:
             params.update({"Descriptions": "False"})
         else:
@@ -127,7 +127,7 @@ class AwisApi(object):
         return self.request(params)
         
     def url_info(self, urls, *response_groups, **kwargs):
-        params = { "Action": "UrlInfo" }
+        params = {"Action": "UrlInfo"}
         if not isinstance(urls, (list, tuple)):
             params.update({
                 "Url": urllib.quote(urls),
@@ -135,7 +135,7 @@ class AwisApi(object):
              })
         else:
             if len(urls) > self.MAX_BATCH_REQUESTS:
-                raise RuntimeError, "Maximum number of batch URLs is %s." % self.MAX_BATCH_REQUESTS
+                raise RuntimeError("Maximum number of batch URLs is %s." % self.MAX_BATCH_REQUESTS)
 
             params.update({ "UrlInfo.Shared.ResponseGroup": ",".join(response_groups), })
 
@@ -146,7 +146,7 @@ class AwisApi(object):
 
     def sites_linking_in(self, urls, count=MAX_SITES_LINKING_IN_COUNT, start=0):
         if count > self.MAX_SITES_LINKING_IN_COUNT:
-            raise RuntimeError, "Maximum SitesLinkingIn result count is %s." % self.MAX_SITES_LINKING_IN_COUNT
+            raise RuntimeError("Maximum SitesLinkingIn result count is %s." % self.MAX_SITES_LINKING_IN_COUNT)
 
         params = { "Action": "SitesLinkingIn" }
         if not isinstance(urls, (list, tuple)):
@@ -158,7 +158,7 @@ class AwisApi(object):
              })
         else:
             if len(urls) > self.MAX_BATCH_REQUESTS:
-                raise RuntimeError, "Maximum number of batch URLs is %s." % self.MAX_BATCH_REQUESTS
+                raise RuntimeError("Maximum number of batch URLs is %s." % self.MAX_BATCH_REQUESTS)
 
             params.update({
                 "SitesLinkingIn.Shared.ResponseGroup": "SitesLinkingIn",
