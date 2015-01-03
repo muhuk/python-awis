@@ -42,7 +42,7 @@ __credits__ = [u'Atamert \xd6l\xe7gen',
 
 
 __license__ = 'GPL'
-__version__ = '1.2.0-SNAPSHOT'
+__version__ = '1.2.1-SNAPSHOT'
 __maintainer__ = u'Atamert \xd6l\xe7gen'
 __email__ = 'muhuk@muhuk.com'
 __status__ = 'Production'

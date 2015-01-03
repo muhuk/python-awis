@@ -33,6 +33,7 @@ Batch ``SitesLinkingIn`` requests::
 
     tree = api.sites_linking_in(['metmuseum.org', 'wikipedia.org'])
 
+
 Making ``CategoryListings`` requests::
 
     api = AwisApi(ACCESS_ID, SECRET_ACCESS_KEY)
@@ -53,7 +54,7 @@ Changes since version 1.0
 Changes since version 1.1
 -------------------------
 
-- ...
+- Added ``CategoryListings`` request support.
 
 
 .. _Alexa Web Information Service: http://aws.amazon.com/awis/
