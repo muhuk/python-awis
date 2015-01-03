@@ -41,7 +41,7 @@ __credits__ = [u'Atamert \xd6l\xe7gen',
 
 
 __license__ = 'GPL'
-__version__ = '1.1.2-SNAPSHOT'
+__version__ = '1.2.0-SNAPSHOT'
 __maintainer__ = u'Atamert \xd6l\xe7gen'
 __email__ = 'muhuk@muhuk.com'
 __status__ = 'Production'
@@ -125,7 +125,7 @@ class AwisApi(object):
             params.update({"Descriptions": "True"})
 
         return self.request(params)
-        
+
     def url_info(self, urls, *response_groups, **kwargs):
         params = {"Action": "UrlInfo"}
         if not isinstance(urls, (list, tuple)):
