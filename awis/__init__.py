@@ -74,7 +74,7 @@ class AwisApi(object):
     }
     MAX_BATCH_REQUESTS = 5
     MAX_SITES_LINKING_IN_COUNT = 20
-    MAX_CATEGORY_LISTINGS_COUNT = 100
+    MAX_CATEGORY_LISTINGS_COUNT = 20
 
     def __init__(self, access_id, secret_access_key):
         self.access_id = access_id
@@ -116,19 +116,20 @@ class AwisApi(object):
            ),
         )
 
-    def category_listings(self, path, SortBy="Popularity", Recursive=False, Start=1, Count=MAX_CATEGORY_LISTINGS_COUNT, Descriptions=False):
-        if Count > self.MAX_CATEGORY_LISTINGS_COUNT:
-            raise RuntimeError("Max number of returned listings is %s." % self.MAX_CATEGORY_LISTINGS_COUNT)
+    def category_listings(self, path, SortBy="Popularity", Recursive=False, Start=1, Count=100, Descriptions=False):
+        if Count > self.MAX_CATEGORY_LISTINGS_COUNT and Count != 100:
+            raise RuntimeError("Max number of specified returned listings is %s." % self.MAX_CATEGORY_LISTINGS_COUNT)
         params = {
             "Action": "CategoryListings",
             "ResponseGroup": "Listings",
             "Path": quote(path),
             "SortBy": SortBy,
-            "Count": str(Count),
             "Start": str(Start),
             "Recursive": str(Recursive),
             "Descriptions": str(Descriptions)
         }
+        if Count < 100:
+            params.update({"Count": str(Count)})
 
         return self.request(params)
 
