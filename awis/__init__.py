@@ -21,7 +21,6 @@ import base64
 import datetime
 import hashlib
 import hmac
-import sys
 
 try:
     from urllib.request import urlopen
@@ -125,7 +124,7 @@ class AwisApi(object):
             "Path": quote(path),
             "SortBy": SortBy,
             "Start": str(Start),
-            "Recursive": str(Recursive),
+            "Recursive": str(not not Recursive),
             "Descriptions": str(Descriptions)
         }
         if Count < 100:
