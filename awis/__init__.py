@@ -21,7 +21,13 @@ import base64
 import datetime
 import hashlib
 import hmac
-import urllib
+
+try:
+    from urllib.request import urlopen
+    from urllib.parse import quote, urlencode
+except ImportError:
+    from urllib import urlopen, quote, urlencode
+
 try:
     from lxml import etree as ET
 except ImportError:
@@ -78,7 +84,7 @@ class AwisApi(object):
                          self.AWIS_HOST,
                          self.PATH,
                          self._urlencode(params)])
-        hmac_signature = hmac.new(self.secret_access_key, msg, hashlib.sha1)
+        hmac_signature = hmac.new(self.secret_access_key.encode('utf-8'), msg.encode('utf-8'), hashlib.sha1)
         signature = base64.b64encode(hmac_signature.digest())
         return signature
 
@@ -95,7 +101,7 @@ class AwisApi(object):
                                   self._urlencode(params))
         failed_requests = 0
         while failed_requests < tries:
-            response = urllib.urlopen(url)
+            response = urlopen(url)
             if response.code == 200:
                 if as_xml:
                     return ET.parse(response)
@@ -109,21 +115,20 @@ class AwisApi(object):
            ),
         )
 
-    def category_listings(self, path, SortBy="Popularity", Recursive=False, Start=1, Count=MAX_CATEGORY_LISTINGS_COUNT, Descriptions=False):
-        params = {"Action": "CategoryListings", "ResponseGroup": "Listings"}
-        params.update({"Path": urllib.quote(path)})
-        params.update({"SortBy": SortBy})
-        if not Recursive:
-            params.update({"Recursive": "False"})
-        else:
-            params.update({"Recursive": "True"})
-        params.update({"Start":str(Start)})
-        if Count > self.MAX_CATEGORY_LISTINGS_COUNT:
-            raise RuntimeError("Max number of returned listings is %s." % self.MAX_CATEGORY_LISTINGS_COUNT)
-        if not Descriptions:
-            params.update({"Descriptions": "False"})
-        else:
-            params.update({"Descriptions": "True"})
+    def category_listings(self, path, SortBy="Popularity", Recursive=False, Start=1, Count=100, Descriptions=False):
+        if Count > self.MAX_CATEGORY_LISTINGS_COUNT and Count != 100:
+            raise RuntimeError("Max number of specified returned listings is %s." % self.MAX_CATEGORY_LISTINGS_COUNT)
+        params = {
+            "Action": "CategoryListings",
+            "ResponseGroup": "Listings",
+            "Path": quote(path),
+            "SortBy": SortBy,
+            "Start": str(Start),
+            "Recursive": str(not not Recursive),
+            "Descriptions": str(Descriptions)
+        }
+        if Count < 100:
+            params.update({"Count": str(Count)})
 
         return self.request(params)
 
@@ -131,7 +136,7 @@ class AwisApi(object):
         params = {"Action": "UrlInfo"}
         if not isinstance(urls, (list, tuple)):
             params.update({
-                "Url": urllib.quote(urls),
+                "Url": quote(urls),
                 "ResponseGroup": ",".join(response_groups),
              })
         else:
@@ -141,7 +146,7 @@ class AwisApi(object):
             params.update({ "UrlInfo.Shared.ResponseGroup": ",".join(response_groups), })
 
             for i, url in enumerate(urls):
-                params.update({"UrlInfo.%d.Url" % (i + 1): urllib.quote(url)})
+                params.update({"UrlInfo.%d.Url" % (i + 1): quote(url)})
 
         return self.request(params, **kwargs)
 
@@ -152,7 +157,7 @@ class AwisApi(object):
         params = { "Action": "SitesLinkingIn" }
         if not isinstance(urls, (list, tuple)):
             params.update({
-                "Url": urllib.quote(urls),
+                "Url": quote(urls),
                 "ResponseGroup": "SitesLinkingIn",
                 "Count": count,
                 "Start": start,
@@ -168,7 +173,7 @@ class AwisApi(object):
             })
 
             for i, url in enumerate(urls):
-                params.update({"SitesLinkingIn.%d.Url" % (i + 1): urllib.quote(url)})
+                params.update({"SitesLinkingIn.%d.Url" % (i + 1): quote(url)})
 
         return self.request(params)
 
@@ -179,4 +184,4 @@ class AwisApi(object):
     @staticmethod
     def _urlencode(params):
         params = [(key, params[key]) for key in sorted(params.keys())]
-        return urllib.urlencode(params)
+        return urlencode(params)
