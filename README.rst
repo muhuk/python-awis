@@ -1,3 +1,7 @@
+.. attention:: This package is no longer maintained. See `this ticket <https://github.com/muhuk/python-awis/issues/11#issuecomment-219203887>`_ for more info.
+
+-----
+
 Wraps `Alexa Web Information Service`_.
 
 Usage
